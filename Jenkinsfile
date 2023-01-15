@@ -1,7 +1,7 @@
-def ENV_NAME = getEnvName(env.BRANCH_NAME)
-def CONTAINER_NAME = "calculator-" + ENV_NAME
-def CONTAINER_TAG = getTag(env.BUILD_NUMBER, env.BRANCH_NAME)
-def HTTP_PORT = getHTTPPort(env.BRANCH_NAME)
+def ENV_NAME         = getEnvName(env.BRANCH_NAME)
+def CONTAINER_NAME   = "calculator-" + ENV_NAME
+def CONTAINER_TAG    = getTag(env.BUILD_NUMBER, env.BRANCH_NAME)
+def HTTP_PORT        = getHTTPPort(env.BRANCH_NAME)
 def EMAIL_RECIPIENTS = "muller.daniel@free.fr"
 
 
@@ -76,17 +76,17 @@ def imageBuild(containerName, tag) {
 }
 
 def pushToImage(containerName, tag, dockerUser, dockerPassword) {
-    echo '''Image  -u ${dockerUser} -p ${dockerPassword}'''
-    sh '''docker login -u ${dockerUser} -p ${dockerPassword}'''
-    sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
-    sh "docker push $dockerUser/$containerName:$tag"
+    echo "Image -u $dockerUser -p $dockerPassword"
+    sh """docker login -u $dockerUser -p $dockerPassword"""
+    //sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
+    //sh "docker push $dockerUser/$containerName:$tag"
     echo "Image push complete"
 }
 
 def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
     echo "Docker pull ${dockerHubUser}"
-    sh "docker pull $dockerHubUser/$containerName:$tag"
-    sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
+    //sh "docker pull $dockerHubUser/$containerName:$tag"
+    //sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
 }
 
