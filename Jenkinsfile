@@ -79,8 +79,8 @@ def imageBuild(containerName, tag) {
 
 //def pushToImage(containerName, tag, dockerUser, dockerPassword) {
 def pushToImage(containerName, tag) {
-    echo "Image -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
-    sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
+    echo 'Image -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
+    sh 'docker login -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
     //sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
     //sh "docker push $dockerUser/$containerName:$tag"
     echo "Image push complete"
@@ -88,7 +88,7 @@ def pushToImage(containerName, tag) {
 
 //def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
 def runApp(containerName, tag, httpPort, envName) {
-    echo "Docker pull ${DOCKER_CREDS_USR}"
+    echo 'Docker pull $DOCKER_CREDS_USR'
     //sh "docker pull $dockerHubUser/$containerName:$tag"
     //sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
