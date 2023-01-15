@@ -82,7 +82,7 @@ def imageBuild(containerName, tag) {
 //def pushToImage(containerName, tag, dockerUser, dockerPassword) {
 def pushToImage(containerName, tag) {
     echo 'Image -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
-    sh 'echo $DOCKER_CREDS_PSW | sudo docker login -u $DOCKER_CREDS_USR --password-stdin'
+    sh 'docker login -u dmuller5769 -p c4iqsv6Yc4iqsv6Y'
     echo 'Login Completed'
 
     //sh 'docker login -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
@@ -93,7 +93,7 @@ def pushToImage(containerName, tag) {
 
 //def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
 def runApp(containerName, tag, httpPort, envName) {
-    echo 'Docker pull $DOCKER_CREDS_USR'
+    //echo 'Docker pull $DOCKER_CREDS_USR'
     //sh "docker pull $dockerHubUser/$containerName:$tag"
     //sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
