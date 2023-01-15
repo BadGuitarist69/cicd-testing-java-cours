@@ -4,10 +4,6 @@ def CONTAINER_TAG    = getTag(env.BUILD_NUMBER, env.BRANCH_NAME)
 def HTTP_PORT        = getHTTPPort(env.BRANCH_NAME)
 def EMAIL_RECIPIENTS = "muller.daniel@free.fr"
 
-environment {
-    DOCKER_CREDS     = credentials('dockerhubcredentials')
-}
-
 node {
     try {
         stage('Initialize') {
@@ -46,17 +42,15 @@ node {
         }
 
         stage('Push to Docker Registry') {
-            //withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                //pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
-                pushToImage(CONTAINER_NAME, CONTAINER_TAG)
-            //}
+            withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
+            }
         }
 
         stage('Run App') {
-            //withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                // runApp(CONTAINER_NAME, CONTAINER_TAG, USERNAME, HTTP_PORT, ENV_NAME)
-                runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT, ENV_NAME)
-            //}
+            withCredentials([usernamePassword(credentialsId: 'dockerhubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                runApp(CONTAINER_NAME, CONTAINER_TAG, USERNAME, HTTP_PORT, ENV_NAME)
+            }
         }
 
     } finally {
@@ -79,23 +73,18 @@ def imageBuild(containerName, tag) {
     echo "Image build complete"
 }
 
-//def pushToImage(containerName, tag, dockerUser, dockerPassword) {
-def pushToImage(containerName, tag) {
-    echo 'Image -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
-    sh 'docker login -u dmuller5769 -p c4iqsv6Yc4iqsv6Y'
-    echo 'Login Completed'
+def pushToImage(containerName, tag, dockerUser, dockerPassword) {
 
-    //sh 'docker login -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
-    //sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
-    //sh "docker push $dockerUser/$containerName:$tag"
+    sh 'docker login -u dmuller5769 -p c4iqsv6Yc4iqsv6Y'
+    sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
+    sh "docker push $dockerUser/$containerName:$tag"
     echo "Image push complete"
 }
 
-//def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
-def runApp(containerName, tag, httpPort, envName) {
-    //echo 'Docker pull $DOCKER_CREDS_USR'
-    //sh "docker pull $dockerHubUser/$containerName:$tag"
-    //sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
+def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
+
+    sh "docker pull $dockerHubUser/$containerName:$tag"
+    sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
 }
 
