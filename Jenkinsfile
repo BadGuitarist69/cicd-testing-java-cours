@@ -2,9 +2,11 @@ def ENV_NAME         = getEnvName(env.BRANCH_NAME)
 def CONTAINER_NAME   = "calculator-" + ENV_NAME
 def CONTAINER_TAG    = getTag(env.BUILD_NUMBER, env.BRANCH_NAME)
 def HTTP_PORT        = getHTTPPort(env.BRANCH_NAME)
-def DOCKER_CREDS     = credentials('dockerhubcredentials')
 def EMAIL_RECIPIENTS = "muller.daniel@free.fr"
 
+environment {
+    DOCKER_CREDS     = credentials('dockerhubcredentials')
+}
 
 node {
     try {
@@ -80,7 +82,10 @@ def imageBuild(containerName, tag) {
 //def pushToImage(containerName, tag, dockerUser, dockerPassword) {
 def pushToImage(containerName, tag) {
     echo 'Image -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
-    sh 'docker login -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
+    sh 'echo $DOCKER_CREDS_PSW | sudo docker login -u $DOCKER_CREDS_USR --password-stdin'
+    echo 'Login Completed'
+
+    //sh 'docker login -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
     //sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
     //sh "docker push $dockerUser/$containerName:$tag"
     echo "Image push complete"
