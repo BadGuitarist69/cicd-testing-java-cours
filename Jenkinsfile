@@ -75,16 +75,18 @@ def imageBuild(containerName, tag) {
 
 def pushToImage(containerName, tag, dockerUser, dockerPassword) {
 
-    sh 'docker login -u dmuller5769 -p c4iqsv6Yc4iqsv6Y'
-    sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
-    sh "docker push $dockerUser/$containerName:$tag"
+    //sh 'docker login -u dmuller5769 -p c4iqsv6Yc4iqsv6Y'
+    //sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
+    //sh "docker push $dockerUser/$containerName:$tag"
     echo "Image push complete"
 }
 
 def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
 
-    sh "docker pull $dockerHubUser/$containerName:$tag"
-    sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
+    //sh "docker pull $dockerHubUser/$containerName:$tag"
+    //sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
+
+    sh "docker run --rm --env SPRING_ACTIVE_PROFILES=$envName -d -p $httpPort:$httpPort --name $containerName $containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
 }
 
